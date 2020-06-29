@@ -108,52 +108,58 @@ class Trainer:
     
 
     def change_active(self, change_to):
-        print("That's enough {active}. {change} I choose you.".format(active = self.active.name, change = self.pokedex[change_to].name))
-        self.active = self.pokedex[change_to]
+        if self.pokedex[change_to].is_knocked_out == True:
+            print("{pokemon} cannot fight. {pokemon} is knocked out!".format(pokemon = self.pokedex[change_to].name))
+        else:
+            print("That's enough {active}. {change} I choose you.".format(active = self.active.name, change = self.pokedex[change_to].name))
+            self.active = self.pokedex[change_to]
     
     def use_potion(self, potion):
         print("{trainer} used {potion}.".format(trainer = self.name, potion = potion))
-        if self.active.health == self.active.max_health:
-            print("{pokemon} is already at max health".format(pokemon = self.active.name))
-            return
-        for use in self.inventory:
-            potion_index = self.inventory.index(potion)
-            if use == potion:
-                self.inventory.pop(potion_index)  
-
-        if potion == "potion":
-            self.active.gain_health(50)
-        elif potion == "super potion":
-            self.active.gain_health(100)
-        elif potion == "revive potion":
-            self.active.revive(potion) 
+        try:
+            if self.active.health == self.active.max_health:
+                print("{pokemon} is already at max health".format(pokemon = self.active.name))
+                return
+            for use in self.inventory:
+                potion_index = self.inventory.index(potion)
+                if use == potion:
+                    self.inventory.pop(potion_index)                  
+            if potion == "potion":
+                self.active.gain_health(50)
+            elif potion == "super potion":
+                self.active.gain_health(100)
+            elif potion == "revive potion":
+                self.active.revive(potion)
+        except:
+            print("No {potion}'s in inventory".format(potion = potion)) 
 
 
 ash = Trainer("Ash", [pikachu, charmander, squirtle], ["super potion", "potion", "revive potion"])
 print(ash)
 
-gary = Trainer("Gary", [bulbasaur, vulpix, geodude], ["potion", "revive potion"])
+gary = Trainer("Gary", [bulbasaur, vulpix, geodude], ["potion",])
 
 #testing of Trainer methods
 
-#ash.attack_other_trainer(gary)
-#gary.change_active(1)
-#gary.attack_other_trainer(ash)
-#ash.attack_other_trainer(gary)
-#gary.attack_other_trainer(ash)
-#ash.change_active(2)
-#ash.attack_other_trainer(gary)
-#ash.attack_other_trainer(gary)
-#ash.attack_other_trainer(gary)
-#ash.attack_other_trainer(gary)
-#ash.attack_other_trainer(gary)
-#ash.attack_other_trainer(gary)
-#gary.attack_other_trainer(ash)
+ash.attack_other_trainer(gary)
+gary.change_active(1)
+gary.attack_other_trainer(ash)
+ash.attack_other_trainer(gary)
+gary.attack_other_trainer(ash)
+ash.change_active(2)
+ash.attack_other_trainer(gary)
+ash.attack_other_trainer(gary)
+ash.attack_other_trainer(gary)
+ash.attack_other_trainer(gary)
+ash.attack_other_trainer(gary)
+ash.attack_other_trainer(gary)
+gary.attack_other_trainer(ash)
 #print(gary.inventory)
-#gary.use_potion("revive potion")
+gary.use_potion("revive potion")
 #print(gary.inventory)
 
 ash.use_potion("potion")
 print(ash.inventory)
 gary.attack_other_trainer(ash)
 ash.use_potion("potion")
+gary.change_active(1)

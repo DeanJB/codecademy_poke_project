@@ -23,8 +23,12 @@ class Pokemon:
         if self.health == 0:
             print("Cannot heal, {pokemon} is fainted".format(pokemon = self.name))
         else:
-            self.health += gain
-            print("{pokemon} gained {gain} points of health. {pokemon} now has {health} health.").format(pokemon = self.name, gain = gain, health = self.health)
+            if self.health <= self.max_health - gain:
+                self.health += gain
+                print("{pokemon} gained {gain} points of health. {pokemon} now has {health} health.").format(pokemon = self.name, gain = gain, health = self.health)
+            else:
+                print("{pokemon} gained {gain} points of health. {pokemon} is now at full health".format(pokemon = self.name, gain = self.max_health - self.health))
+                self.health = self.max_health
 
     def revive(self, gain):
         if self.health > 0:
@@ -109,12 +113,16 @@ class Trainer:
     
     def use_potion(self, potion):
         print("{trainer} used {potion}.".format(trainer = self.name, potion = potion))
+        if self.active.health == self.active.max_health:
+            print("{pokemon} is already at max health".format(pokemon = self.active.name))
+            return
         for use in self.inventory:
             potion_index = self.inventory.index(potion)
             if use == potion:
                 self.inventory.pop(potion_index)  
-        if potion == "healing potion":
-            self.active.gain_health(50)            
+
+        if potion == "potion":
+            self.active.gain_health(50)
         elif potion == "super potion":
             self.active.gain_health(100)
         elif potion == "revive potion":
@@ -126,19 +134,26 @@ print(ash)
 
 gary = Trainer("Gary", [bulbasaur, vulpix, geodude], ["potion", "revive potion"])
 
-ash.attack_other_trainer(gary)
-gary.change_active(1)
+#testing of Trainer methods
+
+#ash.attack_other_trainer(gary)
+#gary.change_active(1)
+#gary.attack_other_trainer(ash)
+#ash.attack_other_trainer(gary)
+#gary.attack_other_trainer(ash)
+#ash.change_active(2)
+#ash.attack_other_trainer(gary)
+#ash.attack_other_trainer(gary)
+#ash.attack_other_trainer(gary)
+#ash.attack_other_trainer(gary)
+#ash.attack_other_trainer(gary)
+#ash.attack_other_trainer(gary)
+#gary.attack_other_trainer(ash)
+#print(gary.inventory)
+#gary.use_potion("revive potion")
+#print(gary.inventory)
+
+ash.use_potion("potion")
+print(ash.inventory)
 gary.attack_other_trainer(ash)
-ash.attack_other_trainer(gary)
-gary.attack_other_trainer(ash)
-ash.change_active(2)
-ash.attack_other_trainer(gary)
-ash.attack_other_trainer(gary)
-ash.attack_other_trainer(gary)
-ash.attack_other_trainer(gary)
-ash.attack_other_trainer(gary)
-ash.attack_other_trainer(gary)
-gary.attack_other_trainer(ash)
-print(gary.inventory)
-gary.use_potion("revive potion")
-print(gary.inventory)
+ash.use_potion("potion")
